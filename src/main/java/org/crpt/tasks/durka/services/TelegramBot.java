@@ -1,6 +1,7 @@
 package org.crpt.tasks.durka.services;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
 import org.crpt.tasks.durka.configs.BotConfig;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -17,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig botConfig;
     private final JiraService jiraService;
+    private final LogsService logsService;
 
     @Override
     public String getBotUsername() {
@@ -52,6 +54,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    break;
+                case "/logs":
+                    response = logsService.getLogs();
+                    sendMessage(chatId, response);
                     break;
                 default:
                     try {
